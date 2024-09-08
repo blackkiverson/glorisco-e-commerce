@@ -20,6 +20,12 @@
     --gutter-h: 24px;
     --block-padding: 60px;
   }
+
+  // Light mode variables
+  --color-text: var(--color-dark-500);
+  --color-background: var(--color-base-0);
+  --theme-bg: var(--color-base-0);
+  --theme-text: var(--color-dark-500);
 }
 
 * {
@@ -38,6 +44,17 @@ html {
   }
 }
 
+// Define styles for light and dark modes using data-theme attribute
+html[data-theme="light"] {
+  --theme-bg: var(--color-base-0); // Light background color
+  --theme-text: var(--color-dark-500); // Light mode text color
+}
+
+html[data-theme="dark"] {
+  --theme-bg: var(--color-base-900); // Dark background color
+  --theme-text: var(--color-base-100); // Dark mode text color
+}
+
 html,
 body,
 #app {
@@ -48,7 +65,8 @@ body {
   font-family: var(--font-jost);
   margin: 0;
   padding: 0;
-  color: var(--color-dark-500);
+  background: var(--theme-bg);
+  color: var(--theme-text);
 
   display: flex;
   flex-flow: column;

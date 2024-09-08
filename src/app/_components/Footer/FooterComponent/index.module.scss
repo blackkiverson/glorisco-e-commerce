@@ -34,6 +34,12 @@
 
 .icon {
   margin-bottom: 16px;
+  filter: none; // Default to no filter (black)
+
+  // For dark theme
+  html[data-theme='dark'] & {
+    filter: invert(1); // Invert colors for dark mode (white)
+  }
 }
 
 
