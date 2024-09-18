@@ -3,15 +3,15 @@ import { Metadata } from 'next'
 import { draftMode } from 'next/headers'
 import { notFound } from 'next/navigation'
 
-import { Category } from '../../../payload/payload-types'
 import type { Page } from '../../../payload/payload-types'
+import { Category } from '../../../payload/payload-types'
 import { staticHome } from '../../../payload/seed/home-static'
 import { fetchDoc } from '../../_api/fetchDoc'
 import { fetchDocs } from '../../_api/fetchDocs'
 import { Blocks } from '../../_components/Blocks'
+import { Gutter } from '../../_components/Gutter'
 import { Hero } from '../../_components/Hero'
 import { generateMeta } from '../../_utilities/generateMeta'
-import { Gutter } from '../../_components/Gutter'
 
 // Payload Cloud caches all files through Cloudflare, so we don't need Next.js to cache them as well
 // This means that we can turn off Next.js data caching and instead rely solely on the Cloudflare CDN
@@ -20,6 +20,8 @@ import { Gutter } from '../../_components/Gutter'
 // See https://nextjs.org/docs/app/api-reference/file-conventions/route-segment-config#dynamic
 // If you are not using Payload Cloud then this line can be removed, see `../../../README.md#cache`
 export const dynamic = 'force-dynamic'
+
+import Categories from '../../_components/Categories'
 
 import classes from './index.module.scss'
 
@@ -36,7 +38,7 @@ export default async function Page({ params: { slug = 'home' } }) {
       draft: isDraftMode,
     })
 
-    categories = await fetchDocs<Category>('categories');
+    categories = await fetchDocs<Category>('categories')
   } catch (error) {
     // when deploying this template on Payload Cloud, this page needs to build before the APIs are live
     // so swallow the error here and simply render the page with fallback data where necessary
@@ -63,8 +65,8 @@ export default async function Page({ params: { slug = 'home' } }) {
         <section>
           <Hero {...hero} />
 
-          <Gutter children={''}>
-            {/* categories */}
+          <Gutter className={classes.home}>
+            <Categories categories={categories} />
           </Gutter>
         </section>
       ) : (
@@ -76,7 +78,6 @@ export default async function Page({ params: { slug = 'home' } }) {
           />
         </>
       )}
-
     </React.Fragment>
   )
 }
