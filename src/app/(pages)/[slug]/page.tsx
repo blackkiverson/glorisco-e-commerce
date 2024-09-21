@@ -19,9 +19,11 @@ import { generateMeta } from '../../_utilities/generateMeta'
 // But we also need to force Next.js to dynamically render this page on each request for preview mode to work
 // See https://nextjs.org/docs/app/api-reference/file-conventions/route-segment-config#dynamic
 // If you are not using Payload Cloud then this line can be removed, see `../../../README.md#cache`
+
 export const dynamic = 'force-dynamic'
 
 import Categories from '../../_components/Categories'
+import Promotion from '../../_components/Promotion'
 
 import classes from './index.module.scss'
 
@@ -67,6 +69,7 @@ export default async function Page({ params: { slug = 'home' } }) {
 
           <Gutter className={classes.home}>
             <Categories categories={categories} />
+            <Promotion />
           </Gutter>
         </section>
       ) : (
