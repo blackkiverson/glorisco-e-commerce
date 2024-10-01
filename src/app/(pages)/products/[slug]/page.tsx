@@ -22,13 +22,12 @@ export default async function Product({ params: { slug } }) {
 
   try {
     product = await fetchDoc<Product>({
-      collection: 'pages',
-      slug: 'products',
+      collection: 'products',
+      slug,
       draft: isDraftMode,
     })
   } catch (error) {
-    // eslint-disable-next-line no-console
-    console.log(error)
+    console.error(error) // eslint-disable-line no-console
   }
 
   if (!product) {
