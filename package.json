@@ -4,6 +4,12 @@
   "version": "1.0.0",
   "main": "dist/server.js",
   "license": "MIT",
+  "engines": {
+    "node": ">=20.15.1",
+    "npm": ">=10.7.0",
+    "pnpm": "9.15.2"
+  },
+  "packageManager": "pnpm@9.15.2",
   "scripts": {
     "dev": "cross-env PAYLOAD_CONFIG_PATH=src/payload/payload.config.ts nodemon",
     "stripe:webhooks": "stripe listen --forward-to localhost:8000/stripe/webhooks",
