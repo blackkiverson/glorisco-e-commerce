@@ -1,3 +1,6 @@
+/* eslint-disable eol-last */
+/* eslint-disable simple-import-sort/imports */
+/* eslint-disable prettier/prettier */
 'use client';
 
 import React from 'react'
