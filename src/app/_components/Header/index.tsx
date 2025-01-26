@@ -15,7 +15,8 @@ export async function Header() {
   try {
     header = await fetchHeader()
   } catch (error) {
-    console.log(error)
+    // Handle the error appropriately, e.g., log to an external service
+    // logErrorToService(error)
   }
 
   return (

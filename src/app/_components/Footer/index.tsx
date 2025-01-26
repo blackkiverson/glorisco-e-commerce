@@ -11,14 +11,15 @@ export async function Footer() {
   try {
     footer = await fetchFooter()
   } catch (error) {
-    console.log(error)
+    // Handle the error appropriately, e.g., set an error state or show a message to the user
+    footer = null
   }
 
   const navItems = footer?.navItems || []
 
   return (
     <>
-      <FooterComponent footer={footer}/>
+      <FooterComponent footer={footer} />
     </>
   )
 }
