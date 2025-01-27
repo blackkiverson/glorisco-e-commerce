@@ -7,7 +7,7 @@
     "jsx": "react",
   },
   "include": [
-    "src/**/*.ts",
-    "src/**/*.tsx"
+    "src/server.ts",
+    "src/payload/payload.config.ts",
   ]
 }
