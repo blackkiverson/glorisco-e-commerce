@@ -17,7 +17,7 @@ export const populateArchiveBlock: AfterReadHook = async ({ doc, context, req: {
         }
 
         if (archiveBlock.populateBy === 'collection' && !context.isPopulatingArchiveBlock) {
-          const res: { totalDocs: number; docs: Product[] } = await payload.find({
+          const res = await payload.find({
             collection: archiveBlock?.relationTo || 'products',
             limit: archiveBlock.limit || 10,
             context: {
@@ -43,7 +43,7 @@ export const populateArchiveBlock: AfterReadHook = async ({ doc, context, req: {
           return {
             ...block,
             populatedDocsTotal: res.totalDocs,
-            populatedDocs: res.docs.map((thisDoc: Product) => ({
+            populatedDocs: (res.docs as unknown as Product[]).map((thisDoc: Product) => ({
               relationTo: archiveBlock.relationTo,
               value: thisDoc.id,
             })),

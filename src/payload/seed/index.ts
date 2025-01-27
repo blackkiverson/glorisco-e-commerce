@@ -72,9 +72,9 @@ export const seed = async (payload: Payload): Promise<void> => {
     }),
   ])
 
-  let image1ID = image1Doc.id
-  let image2ID = image2Doc.id
-  let image3ID = image3Doc.id
+  let image1ID = image1Doc.id.toString()
+  let image2ID = image2Doc.id.toString()
+  let image3ID = image3Doc.id.toString()
 
   if (payload.db.defaultIDType === 'text') {
     image1ID = `"${image1ID}"`
@@ -172,7 +172,7 @@ export const seed = async (payload: Payload): Promise<void> => {
     data: productsPage,
   })
 
-  let productsPageID = productsPageDoc.id
+  let productsPageID = productsPageDoc.id.toString()
 
   if (payload.db.defaultIDType === 'text') {
     productsPageID = `"${productsPageID}"`

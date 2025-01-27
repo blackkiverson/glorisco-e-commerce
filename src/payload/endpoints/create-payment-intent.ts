@@ -30,14 +30,14 @@ export const createPaymentIntent: PayloadHandler = async (req, res): Promise<voi
   }
 
   try {
-    let stripeCustomerID = fullUser?.stripeCustomerID
+    let stripeCustomerID: string | undefined = fullUser?.stripeCustomerID as string | undefined
 
     // lookup user in Stripe and create one if not found
     if (!stripeCustomerID) {
       const customer = await stripe.customers.create({
-        email: fullUser?.email,
-        name: fullUser?.name,
-      })
+        email: fullUser?.email || undefined,
+        name: fullUser?.name || undefined,
+      } as Stripe.CustomerCreateParams)
 
       stripeCustomerID = customer.id
 
@@ -52,7 +52,7 @@ export const createPaymentIntent: PayloadHandler = async (req, res): Promise<voi
 
     let total = 0
 
-    const hasItems = fullUser?.cart?.items?.length > 0
+    const hasItems = (fullUser?.cart as { items: CartItems })?.items?.length > 0
 
     if (!hasItems) {
       throw new Error('No items in cart')
@@ -60,33 +60,35 @@ export const createPaymentIntent: PayloadHandler = async (req, res): Promise<voi
 
     // for each item in cart, lookup the product in Stripe and add its price to the total
     await Promise.all(
-      fullUser?.cart?.items?.map(async (item: CartItems[0]): Promise<null> => {
-        const { product, quantity } = item
+      (fullUser?.cart as { items: CartItems })?.items?.map(
+        async (item: CartItems[0]): Promise<null> => {
+          const { product, quantity } = item
 
-        if (!quantity) {
+          if (!quantity) {
+            return null
+          }
+
+          if (typeof product === 'string' || !product?.stripeProductID) {
+            throw new Error('No Stripe Product ID')
+          }
+
+          const prices = await stripe.prices.list({
+            product: product.stripeProductID,
+            limit: 100,
+            expand: ['data.product'],
+          })
+
+          if (prices.data.length === 0) {
+            res.status(404).json({ error: 'There are no items in your cart to checkout with' })
+            return null
+          }
+
+          const price = prices.data[0]
+          total += price.unit_amount * quantity
+
           return null
-        }
-
-        if (typeof product === 'string' || !product?.stripeProductID) {
-          throw new Error('No Stripe Product ID')
-        }
-
-        const prices = await stripe.prices.list({
-          product: product.stripeProductID,
-          limit: 100,
-          expand: ['data.product'],
-        })
-
-        if (prices.data.length === 0) {
-          res.status(404).json({ error: 'There are no items in your cart to checkout with' })
-          return null
-        }
-
-        const price = prices.data[0]
-        total += price.unit_amount * quantity
-
-        return null
-      }),
+        },
+      ),
     )
 
     if (total === 0) {
