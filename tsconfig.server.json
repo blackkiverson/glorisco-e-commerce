@@ -9,7 +9,5 @@
   "include": [
     "src/server.ts",
     "src/payload/payload.config.ts",
-    "src/**/*.ts",
-    "src/**/*.tsx"
   ]
 }
